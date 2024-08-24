@@ -1,0 +1,50 @@
+﻿@using CloudLabbClient.Models
+@using System.Net.Http;
+@using System.Text.Json;
+
+
+@page "/"
+
+<PageTitle>Home</PageTitle>
+<h1>Listed characters</h1>
+<hr />
+<br />
+@foreach (var character in characters)
+{
+    <h3>@character.Name</h3>
+}
+<p>@errorMessage.ToString()</p>
+
+
+@code{
+    public List<Character> characters = new List<Character>();
+    public string errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync("http://terraformlabbapi:8081/api/characters");
+                //var response = await client.GetAsync("http://localhost:8081/api/characters");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true // Handle case-insensitive property names
+                        };
+
+                    characters = JsonSerializer.Deserialize<List<Character>>(jsonString, options);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.ToString();
+        }
+        
+    }
+}

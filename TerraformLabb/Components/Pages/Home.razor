@@ -1,0 +1,16 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+@foreach(string name in myList)
+{
+	<h1>@name</h1>
+}
+
+@code{
+	public List<string> myList = new() { "Yin", "Yang"};
+	protected override async Task OnInitializedAsync()
+	{
+		myList.Add("Yo");
+	}
+}
