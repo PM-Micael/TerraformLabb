@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   cloudlabbclient:
+    image: micaelmoon/cloudlabbclient
     build:
       context: ./CloudLabbClient
       dockerfile: Dockerfile
@@ -11,9 +12,7 @@ services:
      - cloudlabbnetwork
 
   terraformlabbapi:
-    build:
-      context: ./TerraformLabbApi
-      dockerfile: Dockerfile
+    image: micaelmoon/terraformlabbapi:latest
     ports:
      - "8081:8081"
     depends_on:
